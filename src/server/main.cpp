@@ -4,6 +4,23 @@
 
 std::string LOGGER_NAME = "monitoring_server";
 #include "logger.hpp"
+#include "networking.hpp"
+
+void test() {
+    using namespace asio::ip;
+
+    asio::io_context ctx;
+    tcp::endpoint ep{tcp::v4(), 6969};
+    tcp::acceptor acceptor{ctx, ep};
+    acceptor.listen();
+    tcp::socket sock{ctx};
+
+    acceptor.accept(sock);
+
+    messages::HealthMessage hm;
+    networking::receive_protobuf(sock, hm);
+    logger::log->debug("Received: {}", hm.SerializeAsString());
+}
 
 int main(int argc, char const *argv[])
 {
@@ -17,6 +34,8 @@ int main(int argc, char const *argv[])
 
     CLI11_PARSE(app, argc, argv);
     logger::log->set_level(spdlog::level::from_str(debuglevel));
+
+    test();
     
     return 0;
 }

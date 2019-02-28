@@ -15,3 +15,7 @@ message HealthMessage {
     string message = 3;
 
 }
+
+message HealthCheck {
+    string msg = 1;
+}

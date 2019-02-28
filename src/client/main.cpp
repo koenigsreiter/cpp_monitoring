@@ -1,6 +1,7 @@
 #include <CLI11.hpp>
 #include <thread>
-
+#include <optional>
+#include <json.hpp>
 #include <asio.hpp>
 
 std::string LOGGER_NAME = "monitoring_client";
@@ -8,6 +9,92 @@ std::string LOGGER_NAME = "monitoring_client";
 #include "networking.hpp"
 
 #include "messages.pb.h"
+
+using json = nlohmann::json;
+
+bool check_server_string(std::string inp) {
+    return inp.find(":") != std::string::npos;
+}
+
+std::optional<std::tuple<std::string, std::string>> split_server_name(const std::string& s) {
+    std::vector<std::string> parts;
+    char delimiter{':'};
+    std::string tmp;
+    std::istringstream strm(s);
+    while (std::getline(strm, tmp, delimiter)) {
+        parts.push_back(tmp);
+    }
+
+    try {
+        return {{parts.at(0), parts.at(1)}};
+    } catch (...) { 
+        return {}; 
+    }
+}
+
+bool health_check_server(std::string server_string) {
+    
+    logger::log->info("Checking server {}", server_string);
+    auto opt = split_server_name(server_string);
+    
+    if (!opt) {
+        return false;
+    }
+
+    auto [address, port] = opt.value();
+
+
+    using namespace asio::ip;
+    asio::io_context ctx;
+    tcp::resolver resolver{ctx};
+
+    try {
+        auto results = resolver.resolve(address, port);
+        tcp::socket sock{ctx};
+
+        asio::connect(sock, results);
+
+        messages::HealthCheck req;
+        req.set_msg("HEALTH");
+        networking::send_protobuf(sock, req);
+
+        messages::HealthMessage res;
+        return networking::receive_protobuf(sock, res) && 
+            (res.status() == messages::HealthMessage_Status_UP);
+
+    } catch(...) {
+        logger::log->info("Server {} was not available!", server_string);
+        return false;
+    }
+}
+
+std::optional<std::vector<std::string>> check_available_servers(json j) {
+    if (j["servers"].is_null() || !j["servers"].is_array()) {
+        return {};
+    }
+
+    // TODO: Implement actual healthcheck
+    std::vector<std::string> servers = j["servers"];
+    std::vector<std::string> applicable_servers;
+    std::copy_if(std::begin(servers), std::end(servers), 
+        std::back_inserter(applicable_servers), check_server_string);
+
+    if (applicable_servers.size() == 0) {
+        return {};
+    }
+
+    std::vector<std::string> reachable_servers;
+    std::copy_if(std::begin(applicable_servers), std::end(applicable_servers),
+        std::back_inserter(reachable_servers), health_check_server);
+
+    logger::log->info("{} servers are actually healthy/reachable.", reachable_servers.size());
+
+    if (reachable_servers.size() == 0) {
+        return {};
+    }
+
+    return reachable_servers;
+}
 
 void test() {
 
@@ -50,7 +137,17 @@ int main(int argc, char const *argv[])
     CLI11_PARSE(app, argc, argv);
     logger::log->set_level(spdlog::level::from_str(debuglevel));
 
-    test();
+    json j;
+    {
+        std::ifstream i{infile};
+        i >> j;
+    }
+
+    auto servers = check_available_servers(j);
+    if (!servers) {
+        logger::log->critical("No server appear to be valid; Exiting now...");
+        return 0;
+    }
 
     return 0;
 }

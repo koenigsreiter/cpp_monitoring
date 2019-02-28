@@ -1,0 +1,21 @@
+syntax: glob
+
+# Images for Report
+*.pdf
+*.png
+
+# Build folder
+build/
+
+# Config and example config
+config.json
+example.json
+
+# VSCode folder
+.vscode
+
+# Generated TEX file from MD
+*.tex
+
+.git
+.gitignore

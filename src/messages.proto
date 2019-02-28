@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package messages;
+
+message HealthMessage {
+
+    enum Status {
+        DOWN = 0;
+        UP = 1;
+        INVALID = 2;
+    }
+
+    string name = 1;
+    Status status = 2;
+    string message = 3;
+
+}

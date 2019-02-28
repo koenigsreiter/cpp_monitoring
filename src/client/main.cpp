@@ -1,5 +1,7 @@
 #include <CLI11.hpp>
 #include <thread>
+
+std::string LOGGER_NAME = "monitoring_client";
 #include "logger.hpp"
 
 int main(int argc, char const *argv[])

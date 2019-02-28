@@ -1,8 +1,9 @@
-#include "logger.hpp"
 #include <CLI11.hpp>
-
 #include "messages.pb.h"
 #include <asio.hpp>
+
+std::string LOGGER_NAME = "monitoring_server";
+#include "logger.hpp"
 
 int main(int argc, char const *argv[])
 {

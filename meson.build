@@ -53,9 +53,8 @@ inc_dir = include_directories('include/common')
 inc_server = include_directories('include/server')
 inc_client = include_directories('include/client')
 
-src_client = ['src/client/main.cpp', generated]
+src_client = ['src/client/main.cpp', 'src/client/json_parser.cpp', generated]
 src_server = ['src/server/main.cpp', generated]
-#protobuf: src = ['src/main.cpp', generated]
 
 executable('monitoring_client',
            sources : src_client,

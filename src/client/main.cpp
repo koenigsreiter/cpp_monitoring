@@ -7,7 +7,7 @@
 std::string LOGGER_NAME = "monitoring_client";
 #include "logger.hpp"
 #include "networking.hpp"
-
+#include "json_parser.hpp"
 #include "messages.pb.h"
 
 using json = nlohmann::json;
@@ -123,15 +123,19 @@ void test() {
 
 int main(int argc, char const *argv[])
 {
+    GOOGLE_PROTOBUF_VERIFY_VERSION;
+
     std::string infile = "";
     std::string debuglevel = "debug";
     unsigned short int listener_port = 9696;
+    unsigned short int grpc_port = 4200;
 
     CLI::App app{"Monitoring tool client to start servers and receive messages."};
 
     app.add_option("-c,--config-file", infile, "The JSON config file to load.")->required()->check(CLI::ExistingFile);
     app.add_option("-v,--verbosity", debuglevel, "Debuglevel for the application.", true)->envname("MONITOR_CLIENT_LOG_LEVEL");
     app.add_option("-p,--port", listener_port, "The port where the monitoring messages will be listened on.", true);
+    app.add_option("-g,--grpc-port", grpc_port, "Port to which GRPC will connect.", true)->envname("MONITOR_GRPC_PORT");
 
 
     CLI11_PARSE(app, argc, argv);
@@ -149,5 +153,18 @@ int main(int argc, char const *argv[])
         return 0;
     }
 
+    json_parser jp;
+    auto configs = jp.parse_config(j);
+    if (!configs) {
+        logger::log->critical("No config appears to be valid; Exiting now...");
+        return 0;
+    }
+    logger::log->debug("{} valid configs!", configs->size());
+    for (auto& cfg : configs.value()) {
+        logger::log->debug("{}", cfg.DebugString());
+    }
+
+
+    google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

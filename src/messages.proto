@@ -19,3 +19,38 @@ message HealthMessage {
 message HealthCheck {
     string msg = 1;
 }
+
+message ConfigMessage {
+
+    enum ConfigType {
+        POP3 = 0;
+        TCP = 1;
+        UDP = 2;
+        HTTP = 3;
+        TELNET = 4;
+    }
+
+    // Required accross all types
+    ConfigType type = 1;
+    int32 interval = 2;
+    string address = 3;
+    string port = 4;
+    string name = 5;
+
+    // For HTTP
+    string path = 6;
+    // For POP3
+    string username = 7;
+    string password = 8;
+    // For UDP
+    string message = 9;
+
+
+}
+
+message Config {
+
+    ConfigMessage config = 1;
+    string callback_address = 2;
+    string callback_port = 3;
+}

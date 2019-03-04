@@ -1,12 +1,15 @@
+#ifndef NETWORKING_HPP
+#define NETWORKING_HPP
+
+#include "logger.hpp"
 #include <asio.hpp>
 #include <google/protobuf/message.h>
 
-namespace networking
+class networking
 {
+public:
 
-    using socket = asio::ip::tcp::socket;
-
-    bool send_protobuf(socket& sock, google::protobuf::Message& msg) {
+    static inline bool send_protobuf(asio::ip::tcp::socket& sock, google::protobuf::Message& msg) {
         try {
             u_int64_t msg_size{msg.ByteSizeLong()};
 
@@ -24,7 +27,7 @@ namespace networking
         return true;
     }
 
-    bool receive_protobuf(socket& sock, google::protobuf::Message& msg) {
+    static inline bool receive_protobuf(asio::ip::tcp::socket& sock, google::protobuf::Message& msg) {
         u_int64_t msg_size;
         sock.receive(asio::buffer(&msg_size, sizeof(msg_size)), 0);
 
@@ -37,4 +40,6 @@ namespace networking
         return msg.ParseFromIstream(&is);
     }
 
-} // networking
+};
+
+#endif

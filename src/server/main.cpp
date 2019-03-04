@@ -1,37 +1,12 @@
-#include <CLI11.hpp>
-#include "messages.pb.h"
+#include <string>
 #include <asio.hpp>
-#include <thread>
+#include <CLI11.hpp>
 
 std::string LOGGER_NAME = "monitoring_server";
 #include "logger.hpp"
-#include "networking.hpp"
+#include "monitor.hpp"
+#include "health_checker.hpp"
 
-
-void health_check(unsigned short int port) {
-    using namespace asio::ip;
-
-    asio::io_context ctx;
-    tcp::endpoint ep{tcp::v4(), port};
-    tcp::acceptor acceptor{ctx, ep};
-    acceptor.listen();
-    while (true) {
-        tcp::socket sock{ctx};
-
-        acceptor.accept(sock);
-
-        messages::HealthCheck hm;
-        networking::receive_protobuf(sock, hm);
-        logger::log->debug("Received: {}", hm.SerializeAsString());
-
-        messages::HealthMessage res;
-        res.set_status(messages::HealthMessage_Status_UP);
-        res.set_message("UP");
-        res.set_name("HealthCheck");
-
-        networking::send_protobuf(sock, res);
-    }
-}
 
 int main(int argc, char const *argv[])
 {
@@ -48,8 +23,8 @@ int main(int argc, char const *argv[])
     CLI11_PARSE(app, argc, argv);
     logger::log->set_level(spdlog::level::from_str(debuglevel));
 
-    std::thread health_checker{health_check, listen_port};
+    std::thread health_checker_thread{health_checker{}, listen_port};
 
-    health_checker.join();    
+    health_checker_thread.join();    
     return 0;
 }

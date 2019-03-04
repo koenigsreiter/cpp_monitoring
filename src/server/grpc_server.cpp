@@ -1,6 +1,10 @@
 #include "grpc_server.hpp"
 
-grpc::Status grpc_server::start(grpc::ServerContext* ctx, grpc::ServerReader<messages::Config>* reader, messages::Reply* repl) {
+grpc::Status grpc_server::start(grpc::ServerContext* ctx, grpc::ServerReader<messages::Config>* reader, messages::Reply*) {
+    if (!ctx) {
+        return grpc::Status::CANCELLED;
+    }
+
     messages::Config* cfg = new messages::Config();
 
     while (reader->Read(cfg)) {

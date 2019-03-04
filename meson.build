@@ -55,7 +55,8 @@ inc_client = include_directories('include/client')
 
 src_client = ['src/client/main.cpp', 'src/client/json_parser.cpp', generated]
 src_server = ['src/server/main.cpp', 'src/server/health_checker.cpp', 
-              'src/server/monitor.cpp', 'src/server/tcp_monitor.cpp', generated]
+              'src/server/monitor.cpp', 'src/server/tcp_monitor.cpp', 
+              'src/server/grpc_server.cpp', generated]
 
 executable('monitoring_client',
            sources : src_client,

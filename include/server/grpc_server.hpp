@@ -11,6 +11,7 @@
 class grpc_server final : public messages::Monitor::Service {
 public:
     grpc::Status start(grpc::ServerContext* ctx, grpc::ServerReader<messages::Config>* reader, messages::Reply* repl) override;
+    ~grpc_server() = default;
 };
 
 #endif

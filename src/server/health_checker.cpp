@@ -6,6 +6,7 @@
 #include "messages.pb.h"
 
 void health_checker::operator()(unsigned short int port) {
+    logger::log->info("Healthchecker is listening on port {}", port);
     using namespace asio::ip;
 
     asio::io_context ctx;

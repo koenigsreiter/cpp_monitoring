@@ -24,8 +24,18 @@ int main(int argc, char const *argv[])
     CLI11_PARSE(app, argc, argv);
     logger::log->set_level(spdlog::level::from_str(debuglevel));
 
+    grpc_server server;
+
+    std::string grpc_addr{"0.0.0.0:" + std::to_string(grpc_port)};
+    grpc::ServerBuilder server_builder;
+    server_builder.AddListeningPort(grpc_addr, grpc::InsecureServerCredentials());
+    server_builder.RegisterService(&server);
+    auto grpc_srv{server_builder.BuildAndStart()};
+    logger::log->info("GRPC is listening on {}", grpc_addr);
+
     std::thread health_checker_thread{health_checker{}, listen_port};
 
+    grpc_srv->Wait();
     health_checker_thread.join();    
     return 0;
 }

@@ -6,7 +6,8 @@ std::string LOGGER_NAME = "monitoring_server";
 #include "logger.hpp"
 #include "monitor.hpp"
 #include "health_checker.hpp"
-
+#include "messages.grpc.pb.h"
+#include "grpc_server.hpp"
 
 int main(int argc, char const *argv[])
 {

@@ -51,6 +51,7 @@ void monitor::operator()(std::string callback_address,
             std::this_thread::sleep_for(std::chrono::seconds(current_request_interval));
         }
 
+        client_not_available += 1;
         logger::log->error("Connection to {} was closed! Attempt {}/5", callback_address, client_not_available);
 
     }

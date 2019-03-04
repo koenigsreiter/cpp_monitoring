@@ -1,5 +1,4 @@
 syntax = "proto3";
-import "google/protobuf/empty.proto";
 
 package messages;
 
@@ -56,8 +55,12 @@ message Config {
     string callback_port = 3;
 }
 
+message Reply {
+    // Empty reply
+}
+
 service Monitor {
 
-    rpc start(stream Config) returns (google.protobuf.Empty) {}
+    rpc start(stream Config) returns (Reply) {}
 
 }

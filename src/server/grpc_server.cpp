@@ -8,11 +8,11 @@ grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config
     }
 
     logger::log->debug("Received config {}", cfg->DebugString());
-    monitor mon;
     if (cfg->config().type() == messages::ConfigMessage_ConfigType_TCP) {
         logger::log->debug("Got a TCP config!");
         // Star TCP Monitor
-        mon = tcp_monitor{};
+        tcp_monitor tcp_mon;
+        start_monitoring_thread<tcp_monitor>(tcp_mon, cfg);
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_UDP) {
         // Start UDP Monitor
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_HTTP) {
@@ -23,11 +23,9 @@ grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config
         // Start Telnet Monitor
     } else {
         // Invalid default impl.
-        mon = monitor{};
     }
     // Start thread & detach
-    std::thread monitoring_thread{mon, cfg->callback_address(), cfg->callback_port(), cfg->config()};
-    monitoring_thread.detach();
+    
 
     return grpc::Status::OK;
 }

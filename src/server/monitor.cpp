@@ -33,7 +33,7 @@ void monitor::operator()(std::string callback_address,
         while (sock.is_open()) {
 
 
-            auto res = check(config);
+            auto res = this->check(config);
             if (res.status() == messages::HealthMessage_Status::HealthMessage_Status_UP) {
                 current_request_interval = config.interval();
             } else {

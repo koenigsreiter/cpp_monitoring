@@ -61,6 +61,6 @@ message Reply {
 
 service Monitor {
 
-    rpc start(stream Config) returns (Reply) {}
+    rpc start(Config) returns (Reply) {}
 
 }

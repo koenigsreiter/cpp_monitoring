@@ -3,12 +3,16 @@
 #include <optional>
 #include <json.hpp>
 #include <asio.hpp>
+#include <cmath>
+#include <grpc/grpc.h>
+#include <grpc++/grpc++.h>
 
 std::string LOGGER_NAME = "monitoring_client";
 #include "logger.hpp"
 #include "networking.hpp"
 #include "json_parser.hpp"
 #include "messages.pb.h"
+#include "messages.grpc.pb.h"
 
 using json = nlohmann::json;
 
@@ -73,7 +77,6 @@ std::optional<std::vector<std::string>> check_available_servers(json j) {
         return {};
     }
 
-    // TODO: Implement actual healthcheck
     std::vector<std::string> servers = j["servers"];
     std::vector<std::string> applicable_servers;
     std::copy_if(std::begin(servers), std::end(servers), 
@@ -121,6 +124,39 @@ void test() {
 
 }
 
+void configure_masters(std::vector<std::string>& grpc_servers, std::vector<messages::Config>& configs, std::size_t configs_applied = 0) {
+
+    int configs_per_server = std::ceil(configs.size() / grpc_servers.size());
+    messages::Reply repl;
+
+    for (auto& grpc_server : grpc_servers) {
+        auto channel = grpc::CreateChannel(grpc_server, grpc::InsecureChannelCredentials());
+        auto stub = messages::Monitor::NewStub(channel); 
+        grpc::ClientContext ctx;
+
+        for (; configs_applied < configs.size(); configs_applied++) {
+            auto& config{configs[configs_applied]};
+            grpc::Status status = stub->start(&ctx, config, &repl);
+
+            if (!status.ok()) {
+                break;
+            }
+
+            if ((configs_applied % configs_per_server) == 0) {
+                configs_applied += 1;
+                break;
+            }
+
+        }
+
+    }
+
+    if (configs_applied < configs.size()) {
+        configure_masters(grpc_servers, configs, configs_applied);
+    }
+
+}
+
 int main(int argc, char const *argv[])
 {
     GOOGLE_PROTOBUF_VERIFY_VERSION;
@@ -160,10 +196,15 @@ int main(int argc, char const *argv[])
         return 0;
     }
     logger::log->debug("{} valid configs!", configs->size());
-    for (auto& cfg : configs.value()) {
-        logger::log->debug("{}", cfg.DebugString());
-    }
 
+    std::vector<std::string> grpc_servers;
+    std::transform(std::begin(*servers), std::end(*servers),
+        std::back_inserter(grpc_servers), [&](std::string server_str) {
+            auto [host, ip] = split_server_name(server_str).value();
+            return std::string{host + ":" + std::to_string(grpc_port)};
+    });
+
+    configure_masters(grpc_servers, configs.value());
 
     google::protobuf::ShutdownProtobufLibrary();
     return 0;

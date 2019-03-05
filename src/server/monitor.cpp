@@ -7,7 +7,6 @@
 messages::HealthMessage monitor::check(messages::ConfigMessage) {
     messages::HealthMessage ret;
     ret.set_status(messages::HealthMessage_Status::HealthMessage_Status_INVALID);
-    ret.set_name("INVALID");
     ret.set_message("THE CONFIG YOU PROVIDED WAS INVALID!");
     logger::log->debug("DEFAULT IMPLEMENTATION OF MONITOR CALLED! NOT RECOMMENDED!");
     return ret;
@@ -40,6 +39,7 @@ void monitor::operator()(std::string callback_address,
             } else {
                 current_request_interval *= 2;
             }
+            res.set_name(config.name());
 
             networking::send_protobuf(sock, res);
 
@@ -48,6 +48,7 @@ void monitor::operator()(std::string callback_address,
                 logger::log->error("{} didn't receive a complete message!", config.name());
             }
 
+            logger::log->trace("{} sleeping for {}s", config.name(), current_request_interval);
             std::this_thread::sleep_for(std::chrono::seconds(current_request_interval));
         }
 

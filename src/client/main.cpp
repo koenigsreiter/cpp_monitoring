@@ -13,6 +13,7 @@ std::string LOGGER_NAME = "monitoring_client";
 #include "json_parser.hpp"
 #include "messages.pb.h"
 #include "messages.grpc.pb.h"
+#include "listener.hpp"
 
 using json = nlohmann::json;
 
@@ -130,11 +131,11 @@ void configure_masters(std::vector<std::string>& grpc_servers, std::vector<messa
     messages::Reply repl;
 
     for (auto& grpc_server : grpc_servers) {
-        auto channel = grpc::CreateChannel(grpc_server, grpc::InsecureChannelCredentials());
-        auto stub = messages::Monitor::NewStub(channel); 
-        grpc::ClientContext ctx;
 
         for (; configs_applied < configs.size(); configs_applied++) {
+            auto channel = grpc::CreateChannel(grpc_server, grpc::InsecureChannelCredentials());
+            auto stub = messages::Monitor::NewStub(channel); 
+            grpc::ClientContext ctx;
             auto& config{configs[configs_applied]};
             grpc::Status status = stub->start(&ctx, config, &repl);
 
@@ -177,6 +178,8 @@ int main(int argc, char const *argv[])
     CLI11_PARSE(app, argc, argv);
     logger::log->set_level(spdlog::level::from_str(debuglevel));
 
+    std::thread listener_thread{listener{}, listener_port};
+
     json j;
     {
         std::ifstream i{infile};
@@ -206,6 +209,7 @@ int main(int argc, char const *argv[])
 
     configure_masters(grpc_servers, configs.value());
 
+    listener_thread.join();
     google::protobuf::ShutdownProtobufLibrary();
     return 0;
 }

@@ -6,7 +6,6 @@
 class tcp_monitor : public monitor {
 public:
     tcp_monitor() {};
-protected:
     messages::HealthMessage check(messages::ConfigMessage) override;
 };
 

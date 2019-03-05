@@ -10,7 +10,6 @@ public:
     void operator()(std::string callback_address, 
         std::string callback_port, messages::ConfigMessage config);
     virtual ~monitor() = default;
-protected:
     virtual messages::HealthMessage check(messages::ConfigMessage cfg);
 };
 

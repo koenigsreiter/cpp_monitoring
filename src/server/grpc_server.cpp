@@ -10,6 +10,7 @@ grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config
     logger::log->debug("Received config {}", cfg->DebugString());
     monitor mon;
     if (cfg->config().type() == messages::ConfigMessage_ConfigType_TCP) {
+        logger::log->debug("Got a TCP config!");
         // Star TCP Monitor
         mon = tcp_monitor{};
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_UDP) {

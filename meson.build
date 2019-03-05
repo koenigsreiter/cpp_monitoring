@@ -53,7 +53,8 @@ inc_dir = include_directories('include/common')
 inc_server = include_directories('include/server')
 inc_client = include_directories('include/client')
 
-src_client = ['src/client/main.cpp', 'src/client/json_parser.cpp', generated]
+src_client = ['src/client/main.cpp', 'src/client/json_parser.cpp',
+              'src/client/listener.cpp', generated]
 src_server = ['src/server/main.cpp', 'src/server/health_checker.cpp', 
               'src/server/monitor.cpp', 'src/server/tcp_monitor.cpp', 
               'src/server/grpc_server.cpp', generated]

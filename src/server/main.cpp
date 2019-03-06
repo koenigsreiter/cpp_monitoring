@@ -8,6 +8,7 @@ std::string LOGGER_NAME = "monitoring_server";
 #include "health_checker.hpp"
 #include "messages.grpc.pb.h"
 #include "grpc_server.hpp"
+#include <curl/curl.h>
 
 int main(int argc, char const *argv[])
 {
@@ -23,6 +24,7 @@ int main(int argc, char const *argv[])
 
     CLI11_PARSE(app, argc, argv);
     logger::log->set_level(spdlog::level::from_str(debuglevel));
+    curl_global_init(CURL_GLOBAL_ALL);
 
     grpc_server server;
 
@@ -37,5 +39,6 @@ int main(int argc, char const *argv[])
 
     grpc_srv->Wait();
     health_checker_thread.join();    
+    curl_global_cleanup();
     return 0;
 }

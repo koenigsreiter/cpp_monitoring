@@ -5,6 +5,7 @@ project('simonmon', 'cpp',
         default_options : ['cpp_std=c++17', 'warning_level=3', 'werror=true'])
 
 thread_dep = dependency('threads')
+curl_dep = dependency('libcurl')
 
 # begin asio: https://think-async.com/Asio/
 add_global_arguments('-I' + get_option('asio_include_dir'), language : 'cpp')
@@ -57,7 +58,8 @@ src_client = ['src/client/main.cpp', 'src/client/json_parser.cpp',
               'src/client/listener.cpp', generated]
 src_server = ['src/server/main.cpp', 'src/server/health_checker.cpp', 
               'src/server/monitor.cpp', 'src/server/tcp_monitor.cpp', 
-              'src/server/grpc_server.cpp', generated]
+              'src/server/grpc_server.cpp', 'src/server/udp_monitor.cpp',
+              'src/server/http_monitor.cpp', generated]
 
 executable('monitoring_client',
            sources : src_client,
@@ -68,5 +70,5 @@ executable('monitoring_client',
 executable('monitoring_server',
            sources : src_server,
            include_directories : [inc_dir, inc_server],
-           dependencies : [thread_dep, protobuf_dep, grpc_dep, grpcpp_dep]
+           dependencies : [thread_dep, protobuf_dep, grpc_dep, grpcpp_dep, curl_dep]
           )

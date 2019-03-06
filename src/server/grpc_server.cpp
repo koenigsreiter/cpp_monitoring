@@ -4,6 +4,7 @@
 #include "http_monitor.hpp"
 #include "pop3_monitor.hpp"
 #include "telnet_monitor.hpp"
+#include "udp_monitor.hpp"
 
 grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config* cfg, messages::Reply*) {
     if (!ctx) {
@@ -18,6 +19,8 @@ grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config
         start_monitoring_thread(tcp_mon, cfg);
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_UDP) {
         // Start UDP Monitor
+        udp_monitor udp_mon{};
+        start_monitoring_thread(udp_mon, cfg);
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_HTTP) {
         logger::log->debug("Got a HTTP config!");
         // Start HTTP Monitor
@@ -33,6 +36,8 @@ grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config
         start_monitoring_thread(telnet_mon, cfg);
     } else {
         // Invalid default impl.
+        monitor mon;
+        start_monitoring_thread(mon, cfg);
     }    
 
     return grpc::Status::OK;

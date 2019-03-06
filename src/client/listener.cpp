@@ -2,9 +2,11 @@
 
 #include "networking.hpp"
 #include <iostream>
+#include <mutex>
+
+std::mutex render_mtx;
 
 listener::listener() {
-
 }
 
 std::string listener::construct_string(messages::HealthMessage msg) {
@@ -12,6 +14,7 @@ std::string listener::construct_string(messages::HealthMessage msg) {
 }
 
 void listener::render() {
+    std::lock_guard<std::mutex> lk{render_mtx};
     std::cout << "\033c";
     for (const auto& pair : health_messages) {
         std::cout << construct_string(pair.second) << std::endl;
@@ -40,17 +43,32 @@ bool listener::update(std::string key, messages::HealthMessage msg) {
 
 }
 
+void listener::del(std::string key) {
+
+    health_messages.extract(key);
+
+    std::cout << "\033c";
+    render();
+}
+
 void listener::serve(asio::ip::tcp::socket sock) {
     messages::HealthMessage hm;
     messages::HealthCheck repl;
+    std::string name; 
     repl.set_msg("RECEIVED");
     while (true) {
-        networking::receive_protobuf(sock, hm);
-        if (update(hm.name(), hm)) {
-            render();
-        }
+        try {
+            networking::receive_protobuf(sock, hm);
+            if (update(hm.name(), hm)) {
+                name = hm.name();
+                render();
+            }
 
-        networking::send_protobuf(sock, repl);
+            networking::send_protobuf(sock, repl);
+        } catch (...) {
+            del(name);
+            return; // Thread dies and it is going to be recreated on the next connection
+        }
     }
 }
 

@@ -15,6 +15,7 @@ private:
 
     std::string construct_string(messages::HealthMessage);
     void render();
+    void del(std::string key);
     bool update(std::string key, messages::HealthMessage);
     void serve(asio::ip::tcp::socket sock);
 };

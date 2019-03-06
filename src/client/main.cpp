@@ -6,6 +6,7 @@
 #include <cmath>
 #include <grpc/grpc.h>
 #include <grpc++/grpc++.h>
+#include <cstdlib>
 
 std::string LOGGER_NAME = "monitoring_client";
 #include "logger.hpp"
@@ -189,14 +190,14 @@ int main(int argc, char const *argv[])
     auto servers = check_available_servers(j);
     if (!servers) {
         logger::log->critical("No server appear to be valid; Exiting now...");
-        return 0;
+        quick_exit(EXIT_SUCCESS);
     }
 
     json_parser jp;
     auto configs = jp.parse_config(j);
     if (!configs) {
         logger::log->critical("No config appears to be valid; Exiting now...");
-        return 0;
+        quick_exit(EXIT_SUCCESS);
     }
     logger::log->debug("{} valid configs!", configs->size());
 

@@ -11,6 +11,8 @@ public:
         std::string callback_port, messages::ConfigMessage config);
     virtual ~monitor() = default;
     virtual messages::HealthMessage check(messages::ConfigMessage cfg);
+private:
+    messages::HealthMessage exec_check(messages::ConfigMessage& config, int& current_request_interval);
 };
 
 #endif // MONITOR_HPP

@@ -87,7 +87,7 @@ std::optional<messages::ConfigMessage> json_parser::parse_telnet_json(json telne
 
     messages::ConfigMessage ret;
     fill_required_fields(ret, telnet_msg, telnet_json);
-    ret.set_message(optional_get<std::string>(telnet_json, "message").value_or(""));
+    ret.set_message(optional_get<std::string>(telnet_json, "message").value_or("\n"));
 
     return ret;
 }

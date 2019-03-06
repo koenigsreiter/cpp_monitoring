@@ -9,6 +9,14 @@ pop3_monitor::pop3_monitor() : curl_handle{curl_easy_init()} {
         return;
     }
 
+    if (curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, pop3_monitor::curl_cb) != CURLE_OK) {
+        logger::log->error("Failed to set WRITEFUNCTION! {}", error_buffer);
+    } 
+
+    if (curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &this->buf) != CURLE_OK) {
+        logger::log->error("Could not set WRITEDATA! {}", error_buffer);
+    }
+
     if (curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L) != CURLE_OK) {
         logger::log->error("Failed to set FOLLOWLOCATION! {}", error_buffer);
         return;
@@ -23,7 +31,7 @@ pop3_monitor::pop3_monitor() : curl_handle{curl_easy_init()} {
 
 messages::HealthMessage pop3_monitor::check(messages::ConfigMessage config) {
     messages::HealthMessage hm;
-    std::string url{"pop3://" + config.user() + ":" + config.password() + "@" + 
+    std::string url{"pop3://" + config.username() + ":" + config.password() + "@" + 
         config.address() + ":" + config.port() + "/"};
 
     if (curl_easy_setopt(curl_handle, CURLOPT_URL, url.c_str()) != CURLE_OK) {
@@ -44,4 +52,9 @@ messages::HealthMessage pop3_monitor::check(messages::ConfigMessage config) {
 
 pop3_monitor::~pop3_monitor() {
     // curl_easy_cleanup(curl_handle);
+}
+
+size_t pop3_monitor::curl_cb(char*, size_t size, size_t nmemb, std::string*) {
+
+    return size * nmemb;
 }

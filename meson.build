@@ -59,7 +59,8 @@ src_client = ['src/client/main.cpp', 'src/client/json_parser.cpp',
 src_server = ['src/server/main.cpp', 'src/server/health_checker.cpp', 
               'src/server/monitor.cpp', 'src/server/tcp_monitor.cpp', 
               'src/server/grpc_server.cpp', 'src/server/udp_monitor.cpp',
-              'src/server/http_monitor.cpp', generated]
+              'src/server/http_monitor.cpp', 'src/server/pop3_monitor.cpp',
+              'src/server/telnet_monitor.cpp', generated]
 
 executable('monitoring_client',
            sources : src_client,

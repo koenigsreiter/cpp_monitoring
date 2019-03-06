@@ -6,17 +6,22 @@ http_monitor::http_monitor() : curl_handle{curl_easy_init()} {
 
     if (curl_easy_setopt(curl_handle, CURLOPT_ERRORBUFFER, error_buffer) != CURLE_OK) {
         logger::log->error("Failed to set error buffer");
-        return;
+    }
+
+    if (curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, http_monitor::curl_cb) != CURLE_OK) {
+        logger::log->error("Failed to set WRITEFUNCTION! {}", error_buffer);
+    } 
+
+    if (curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, &this->buf) != CURLE_OK) {
+        logger::log->error("Could not set WRITEDATA! {}", error_buffer);
     }
 
     if (curl_easy_setopt(curl_handle, CURLOPT_FOLLOWLOCATION, 1L) != CURLE_OK) {
         logger::log->error("Failed to set FOLLOWLOCATION! {}", error_buffer);
-        return;
     }
 
     if (curl_easy_setopt(curl_handle, CURLOPT_FAILONERROR, 1L) != CURLE_OK) {
         logger::log->error("Failed to set FAILONERROR! {}", error_buffer);
-        return;
     } 
 
 }
@@ -43,4 +48,9 @@ messages::HealthMessage http_monitor::check(messages::ConfigMessage config) {
 
 http_monitor::~http_monitor() {
     // curl_easy_cleanup(curl_handle);
+}
+
+size_t http_monitor::curl_cb(char*, size_t size, size_t nmemb, std::string*) {
+
+    return size * nmemb;
 }

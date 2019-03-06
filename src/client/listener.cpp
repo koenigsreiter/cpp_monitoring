@@ -8,7 +8,7 @@ listener::listener() {
 }
 
 std::string listener::construct_string(messages::HealthMessage msg) {
-    return msg.name() + " - " + messages::HealthMessage_Status_Name(msg.status()) + " {" + msg.message() + "}";
+    return msg.name() + " - " + messages::HealthMessage_Status_Name(msg.status()) + "\n" + msg.message();
 }
 
 void listener::render() {

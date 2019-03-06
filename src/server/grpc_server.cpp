@@ -2,6 +2,8 @@
 
 #include "logger.hpp"
 #include "http_monitor.hpp"
+#include "pop3_monitor.hpp"
+#include "telnet_monitor.hpp"
 
 grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config* cfg, messages::Reply*) {
     if (!ctx) {
@@ -23,13 +25,15 @@ grpc::Status grpc_server::start(grpc::ServerContext* ctx, const messages::Config
         start_monitoring_thread(http_mon, cfg);
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_POP3) {
         // Start POP3 Monitor
+        pop3_monitor pop3_mon;
+        start_monitoring_thread(pop3_mon, cfg);
     } else if (cfg->config().type() == messages::ConfigMessage_ConfigType_TELNET) {
         // Start Telnet Monitor
+        telnet_monitor telnet_mon;
+        start_monitoring_thread(telnet_mon, cfg);
     } else {
         // Invalid default impl.
-    }
-    // Start thread & detach
-    
+    }    
 
     return grpc::Status::OK;
 }

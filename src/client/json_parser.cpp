@@ -94,6 +94,10 @@ std::optional<messages::ConfigMessage> json_parser::parse_telnet_json(json telne
 
 
 std::optional<messages::ConfigMessage> json_parser::parse_json_to_config_message(json service) {
+    if (service["type"].is_null() || !service["type"].is_string()) {
+        return {};
+    }
+
     std::string type = service["type"];
     std::transform(type.begin(), type.end(), type.begin(), ::tolower);
 

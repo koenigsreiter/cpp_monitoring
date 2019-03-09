@@ -31,13 +31,13 @@ public:
      * 
      * The decision whether a service is "healthy" is 
      * defined by cURL as the return type of the cURL
-     * call is used to determine the status of the service.
+     * call is used to determine the status of the service. 
      * 
      * @returns A HealthMessage with the status `UP` if the
      *          service is available.
      */
     messages::HealthMessage check(messages::ConfigMessage cfg) override;
-    /** Empty default destructor
+    /** Empty default destructor.
      */
     ~http_monitor();
     /** Callback for cURL to prevent output of response to stdout.

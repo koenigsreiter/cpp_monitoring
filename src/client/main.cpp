@@ -164,7 +164,7 @@ int main(int argc, char const *argv[])
     GOOGLE_PROTOBUF_VERIFY_VERSION;
 
     std::string infile = "";
-    std::string debuglevel = "debug";
+    std::string debuglevel = "info";
     unsigned short int listener_port = 9696;
     unsigned short int grpc_port = 4200;
 

@@ -112,7 +112,7 @@ std::optional<messages::ConfigMessage> json_parser::parse_json_to_config_message
     } else if (type == telnet) {
         return parse_telnet_json(service);
     } else if (type == pop3) {
-        return parse_telnet_json(service);
+        return parse_pop3_json(service);
     } else {
         return {};
     }

@@ -9,6 +9,10 @@
 
 using json = nlohmann::json;
 
+/** A class that parses the JSON config file
+ * This class mostly concerns itself with parsing the given JSON config into
+ * the various protobuf Messages.
+ */
 class json_parser {
 public:
     json_parser();

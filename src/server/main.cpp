@@ -12,7 +12,7 @@ std::string LOGGER_NAME = "monitoring_server";
 
 int main(int argc, char const *argv[])
 {
-    std::string debuglevel = "debug";
+    std::string debuglevel = "info";
     short unsigned int listen_port = 6969;
     short unsigned int grpc_port = 4200;
 

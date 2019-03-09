@@ -51,7 +51,6 @@ messages::HealthMessage pop3_monitor::check(messages::ConfigMessage config) {
 }
 
 pop3_monitor::~pop3_monitor() {
-    // curl_easy_cleanup(curl_handle);
 }
 
 size_t pop3_monitor::curl_cb(char*, size_t size, size_t nmemb, std::string*) {

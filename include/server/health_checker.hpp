@@ -3,7 +3,7 @@
 
 /** Thread that listens HealthCheck messages.
  * 
- * Seperate thread to check whether the wether the 
+ * Seperate thread to check whether the whether the 
  * master is available or not.
  * Creates a TCP socket on the specified port and
  * continously listens for protobuf messages.

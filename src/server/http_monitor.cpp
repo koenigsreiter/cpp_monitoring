@@ -47,7 +47,6 @@ messages::HealthMessage http_monitor::check(messages::ConfigMessage config) {
 }
 
 http_monitor::~http_monitor() {
-    // curl_easy_cleanup(curl_handle);
 }
 
 size_t http_monitor::curl_cb(char*, size_t size, size_t nmemb, std::string*) {

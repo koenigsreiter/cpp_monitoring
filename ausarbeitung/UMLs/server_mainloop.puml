@@ -1,0 +1,20 @@
+@startuml server_mainloop
+
+start
+
+while (client is available?) is (is available)
+	:check for availability of service;
+
+	if (service available?) then (yes)
+		:reset request delay to standard;
+	else (no)
+		:increase request delay;
+	endif
+	
+	:send report to client;
+endwhile (has not been available more than five times)
+:stop sending monitoring messages and exit;
+
+end
+
+@enduml

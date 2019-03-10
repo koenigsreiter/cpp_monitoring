@@ -43,10 +43,10 @@ public:
 private:
     /** Utility method to start the thread and detach it
      * @param inp The `monitor` class that is going to be started as a thread
-     * @param cfg Config message containing neccessary information for the monitor
+     * @param cfg Config message containing necessary information for the monitor
      * 
      * Generic method that takes a `monitor` and starts it in a seperate thread.
-     * It also extracts neccessary information of the @p cfg parameter and 
+     * It also extracts necessary information of the @p cfg parameter and 
      * passes it to the thread.
      */
     template <class T> 

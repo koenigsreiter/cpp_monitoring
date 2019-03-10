@@ -100,7 +100,7 @@ private:
      * 
      * This method is started in a thread and is responsible to 
      * read incoming messages and update the state accordingly.
-     * If a rerender of this application is neccessary it will 
+     * If a rerender of this application is necessary it will 
      * also trigger a rerender.
      * 
      * If the connection to the server dies it will also call `del`

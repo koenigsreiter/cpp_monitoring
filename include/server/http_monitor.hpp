@@ -56,7 +56,7 @@ private:
     /** Error buffer that gets populated upon an error.
      */
     char error_buffer[CURL_ERROR_SIZE];
-    /** Neccessary for cURL.
+    /** Necessary for cURL.
      */
     std::string buf;
 };

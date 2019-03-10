@@ -20,4 +20,8 @@ example.json
 .git
 .gitignore
 
+# doxygen generated docs
 docs/
+
+# Report based ignores
+ausarbeitung/compiled_umls

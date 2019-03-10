@@ -1,0 +1,63 @@
+@startuml monitor_variations
+
+/' Objects '/
+
+class http_monitor {
+	+http_monitor()
+	+~http_monitor()
+	-curl_handle : CURL*
+	-error_buffer : char
+	+check(messages::ConfigMessage cfg) : messages::HealthMessage
+	+{static} curl_cb(char* character, size_t size, size_t nmemb, std::string* writer_data) : size_t
+	-buf : std::string
+}
+
+
+class monitor {
+	+monitor()
+	+~monitor()
+	+check(messages::ConfigMessage cfg) : messages::HealthMessage
+	-exec_check(messages::ConfigMessage& config, int& current_request_interval) : messages::HealthMessage
+	+operator()(std::string callback_address, std::string callback_port, messages::ConfigMessage config) : void
+}
+
+
+class pop3_monitor {
+	+pop3_monitor()
+	+~pop3_monitor()
+	-curl_handle : CURL*
+	-error_buffer : char
+	+check(messages:: ConfigMessage) : messages::HealthMessage
+	+{static} curl_cb(char* character, size_t size, size_t nmemb, std::string* writer_data) : size_t
+	-buf : std::string
+}
+
+
+class tcp_monitor {
+	+tcp_monitor()
+	+check(messages::ConfigMessage cfg) : messages::HealthMessage
+}
+
+
+class telnet_monitor {
+	+telnet_monitor()
+	+~telnet_monitor()
+	+check(messages::ConfigMessage cfg) : messages::HealthMessage
+}
+
+
+class udp_monitor {
+	+udp_monitor()
+	+check(messages::ConfigMessage cfg) : messages::HealthMessage
+}
+
+/' Inheritance relationships '/
+
+monitor <|-up- http_monitor
+monitor <|-up-- pop3_monitor
+monitor <|-down- tcp_monitor
+monitor <|-down-- telnet_monitor
+monitor <|-down- udp_monitor
+
+@enduml
+

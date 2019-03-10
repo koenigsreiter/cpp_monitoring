@@ -1,0 +1,12 @@
+@startuml start_sequence
+
+actor client
+participant server
+
+client -> server : Healthcheck Request
+server -> client : Healthcheck Response
+
+client -> server : Send config
+server -> client : Send service status
+
+@enduml

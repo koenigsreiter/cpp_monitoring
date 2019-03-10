@@ -68,23 +68,3 @@ The following libraries were used to power the tool:
 | Output (Client)        | `fmt`      |
 | Configuration (Client) | `JSON`     |
 | CLI argument parsing   | `CLI11`    |
-
-# Server
-
-The server is the actual monitor of each service. It will consistently check a service for its availability and will report the status to the client. The Server has defaults for all important parameter set so it can be started with its default values. All paramaters can optionally be set via environment variables.
-
-## Usage
-
-```text
-Monitor for various services in C++ using gRPC and protobuf
-Usage: ./monitoring_server [OPTIONS]
-
-Options:
-  -h,--help                   Print this help message and exit
-  -v,--verbosity TEXT=info (Env:MONITOR_SERVER_LOG_LEVEL)
-                              Debuglevel for the application.
-  -p,--port UINT=6969 (Env:MONITOR_SERVER_HEALTHCHECK_PORT)
-                              Port the healthchecker listens on.
-  -g,--grpc-port UINT=4200 (Env:MONITOR_GRPC_PORT)
-                              Port for the GRPC server.
-```

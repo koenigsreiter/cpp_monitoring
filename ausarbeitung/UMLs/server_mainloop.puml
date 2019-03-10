@@ -3,7 +3,7 @@
 start
 
 while (client is available?) is (is available)
-	:check for availability of service;
+	#Gray:check for availability of service;
 
 	if (service available?) then (yes)
 		:reset request delay to standard;

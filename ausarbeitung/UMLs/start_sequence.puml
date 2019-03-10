@@ -1,12 +1,33 @@
 @startuml start_sequence
 
-actor client
-participant server
-
-client -> server : Healthcheck Request
-server -> client : Healthcheck Response
-
-client -> server : Send config
-server -> client : Send service status
+|Client|
+start
+:Start listener;
+:Read JSON file;
+repeat
+    if (Server matches pattern <address>:<port>?) then (yes)
+        :Send HealthCheck message to server;
+        |Server|
+        :Return HealthMessage to client;
+        |Client|
+        :Keep Server in list of healthy servers;
+    endif
+repeat while (Still a server in the array)
+:Create `json_parser` object;
+repeat
+    if (Service config fullfils requirements?) then (yes)
+        :Parse service object into `protobuf` object;
+    endif
+repeat while (Services left in array)
+repeat 
+    :Send config to server via gRPC;
+    |Server|
+    :Receive config;
+    :Start monitor;
+    |Client|
+    :Receive reply from server;
+repeat while (Service left in array)
+:Listen until user kills the program;
+stop
 
 @enduml

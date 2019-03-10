@@ -2,7 +2,7 @@ EXECUTABLES = plantuml pandoc
 K := $(foreach exec,$(EXECUTABLES),\
         $(if $(shell which $(exec)), "$(exec) is installed",$(error "No $(exec) in PATH. Please install $(exec) first")))
 FILENAME = koenigsreiter
-FILES = $(FILENAME).md images.md
+FILES = $(FILENAME).md server.md client.md images.md
 
 all: check umls tex pdf
 

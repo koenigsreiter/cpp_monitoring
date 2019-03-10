@@ -16,7 +16,7 @@ class http_monitor {
 class monitor {
 	+monitor()
 	+~monitor()
-	+check(messages::ConfigMessage cfg) : messages::HealthMessage
+	+{abstract}check(messages::ConfigMessage cfg) : messages::HealthMessage
 	-exec_check(messages::ConfigMessage& config, int& current_request_interval) : messages::HealthMessage
 	+operator()(std::string callback_address, std::string callback_port, messages::ConfigMessage config) : void
 }

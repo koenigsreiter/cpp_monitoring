@@ -101,31 +101,6 @@ std::optional<std::vector<std::string>> check_available_servers(json j) {
     return reachable_servers;
 }
 
-void test() {
-
-    using namespace asio::ip;
-
-    asio::io_context ctx;
-    tcp::resolver resolver{ctx};
-
-    try {
-        auto results = resolver.resolve("localhost", "6969");
-        tcp::socket sock{ctx};
-
-        asio::connect(sock, results);
-
-        messages::HealthMessage hm;
-        hm.set_status(messages::HealthMessage_Status_UP);
-        hm.set_message("Hello world!");
-
-        logger::log->debug("Sending msg: {}", hm.SerializeAsString());
-        networking::send_protobuf(sock, hm);
-    } catch (...) {
-        // TODO
-    }
-
-}
-
 void configure_masters(std::vector<std::string>& grpc_servers, std::vector<messages::Config>& configs, std::size_t configs_applied = 0) {
 
     int configs_per_server = std::ceil(configs.size() / grpc_servers.size());

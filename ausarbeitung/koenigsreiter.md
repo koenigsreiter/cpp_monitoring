@@ -12,7 +12,13 @@ This is the essay accompanying the Monitoring tool. It will give a quick overvie
 
 ## Task
 
-The scope of this task is to implement a monitoring tool for a variety of services.
+The scope of this task is to implement a monitoring tool for a variety of services. The services are:
+
+- TCP (Port)
+- UDP (Port)
+- HTTP
+- POP3
+- Telnet
 
 ## Important information
 

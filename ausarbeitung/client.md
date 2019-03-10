@@ -61,3 +61,9 @@ An activity diagram describing the whole process can be found in Figure \ref{fig
 The listener is a seperate component of the client responsible for listening to `HealthMessages` from the server. It is a seperate thread that also renders the state of the class. The state is realized as a `map<string, HealthMessage>` and contains the most recent changed `HealthMessage`. The listener also has a method `bool update(string key, HealthMessage value)` that compares the message and returns true if the application needs a re-render. This was implemented this way to prevent a lot of unneccessary re-renders.
 
 The `void render()` method is responsible to render the whole state to the console. It uses the console code `\033c` to clear the whole console.
+
+## Relations
+
+The following figure \ref{fig:client_class_hierarchy} is going to explain the class relationships in a UML class diagram.
+
+![A class diagram showing the relations between the client and the listener.][client_class_hierarchy]

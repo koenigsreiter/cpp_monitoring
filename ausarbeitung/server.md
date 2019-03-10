@@ -41,3 +41,9 @@ If the client loses the network connectivity the server will try to reconnect to
 ## Health checker
 
 The server also contains a component called the `health_checker`. The health checker is used by the client to perform some checks before actually starting. This component is a separate thread on the server that is continuously listening for incoming connections and send a `HealthMessage` as soon as a client connects to indicate that the server is up and running.
+
+## Relations
+
+For additional information about the relations between the various functions see figure \ref{fig:server_class_hierarchy}.
+
+![An UML showing the relationships between the various server-side classes. For additional information about the monitor relations see figure \ref{fig:monitor_variations}][server_class_hierarchy]

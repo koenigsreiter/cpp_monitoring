@@ -1,0 +1,25 @@
+@startuml client_class_hierarchy
+
+class client {
+    {static} check_server_string(std::string inp) : bool
+    {static} split_server_name(const std::string& s) : std::optional<std::tuple<std::string, std::string>>
+    {static} health_check_server(std::string server_string) : bool
+    {static} check_available_servers(json j) : std::optional<std::vector<std::string>>
+    {static} configure_masters(std::vecotr<std::string>& grpc_servers, std::vector<messages::Config>& configs, std::size_t configs_applied = 0) : void
+    {static} main(int argc, char const *argv[]) : int
+}
+
+class listener {
+    +listener()
+    +operator()(short unsigned int port) : void
+    -health_messages : std::map<std::string, messages::HealthMessage>
+    -construct_string(messages::HealthMessage msg) : std::string
+    -render() : void
+    -del(std::string key) : void
+    -update(std::string key, messages::HealthMessage msg) : bool
+    -serve(asio::ip::tcp::socket sock) : void
+}
+
+client *-- listener
+
+@enduml

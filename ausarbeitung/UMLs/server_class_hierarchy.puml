@@ -1,0 +1,36 @@
+@startuml server_class_hierarchy
+
+class server {
+    +{static} main(int argc, const char *argv[]) : int
+}
+
+class health_checker {
+    +operator()(unsigned short int port) : void
+}
+
+class messages::Monitor::Service {
+
+}
+
+class grpc_server {
+    +start(grpc::ServerContext* ctx, const messages::Config* cfg, messages::Reply* repl) : grpc::Status
+    +~grpc_server()
+    -start_monitoring_thread<T>(T& inp, const messages::Config* cfg) : void
+}
+
+class monitor {
+	+monitor()
+	+~monitor()
+	+{abstract}check(messages::ConfigMessage cfg) : messages::HealthMessage
+	-exec_check(messages::ConfigMessage& config, int& current_request_interval) : messages::HealthMessage
+	+operator()(std::string callback_address, std::string callback_port, messages::ConfigMessage config) : void
+}
+
+
+server *-- health_checker
+messages::Monitor::Service <|-- grpc_server
+server --- grpc_server
+grpc_server o-- monitor
+
+
+@enduml

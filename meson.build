@@ -28,6 +28,9 @@ add_global_arguments('-I' + get_option('json_include_dir'), language : 'cpp')
 # type_safe: https://github.com/foonathan/type_safe
 add_global_arguments('-I' + get_option('type_safe_include_dir'), language : 'cpp')
 
+# fmt: https://github.com/fmtlib/fmt/
+add_global_arguments('-I' + get_option('fmt_include_dir'), language : 'cpp')
+
 # # begin protobuf: https://developers.google.com/protocol-buffers/
 # # protobuf: must be installed independently and has to be found...
 protoc = find_program('protoc', required : true)

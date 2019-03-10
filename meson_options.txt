@@ -2,6 +2,6 @@ option('asio_include_dir', type : 'string', value : '/home/simon/Projects/CPP/li
 option('spdlog_include_dir', type : 'string', value : '/home/simon/Projects/CPP/libs/spdlog/include', description : 'the include dir of spdlog')
 option('clipp_include_dir', type : 'string', value : '/home/simon/Projects/CPP/libs/clipp/include', description : 'the include dir of clipp')
 option('cli11_include_dir', type : 'string', value : '/home/simon/Projects/CPP/libs/CLI11', description : 'the dir containing CLI11.hpp')
-option('fmt_include_dir', type : 'string', value : '', description : 'the include dir of fmt')
+option('fmt_include_dir', type : 'string', value : '/home/simon/Projects/CPP/libs/fmt-5.3.0/include', description : 'the include dir of fmt')
 option('json_include_dir', type : 'string', value : '/home/simon/Projects/CPP/libs/JSON/', description : 'the include dir of json')
 option('type_safe_include_dir', type : 'string', value : '/home/simon/Projects/CPP/libs/type_safe/include', description : 'the include dir of type_safe')

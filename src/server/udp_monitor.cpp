@@ -3,6 +3,9 @@
 #include "logger.hpp"
 #include <asio.hpp>
 #include <sstream>
+#include <thread>
+#include <chrono>
+#include <future>
 
 messages::HealthMessage udp_monitor::check(messages::ConfigMessage cfg) {
     messages::HealthMessage res;
@@ -21,9 +24,15 @@ messages::HealthMessage udp_monitor::check(messages::ConfigMessage cfg) {
         udp::endpoint sender;
         std::string msg(sock.available(), ' ');
 
-        sock.receive_from(asio::buffer(msg), sender);
-        res.set_message(msg);
-        res.set_status(messages::HealthMessage_Status::HealthMessage_Status_UP);
+        if (sock.available() != 0) {
+            sock.receive_from(asio::buffer(msg), sender);
+            res.set_message(msg);
+            res.set_status(messages::HealthMessage_Status::HealthMessage_Status_UP);
+
+        } else {
+            res.set_message("Service didn't respond");
+            res.set_status(messages::HealthMessage_Status::HealthMessage_Status_DOWN);
+        }
 
     } else {
         res.set_message("Service is DOWN");

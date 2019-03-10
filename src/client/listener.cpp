@@ -3,6 +3,7 @@
 #include "networking.hpp"
 #include <iostream>
 #include <mutex>
+#include <fmt/format.h>
 
 std::mutex render_mtx;
 
@@ -10,18 +11,20 @@ listener::listener() {
 }
 
 std::string listener::construct_string(messages::HealthMessage msg) {
-    return msg.name() + " - " + messages::HealthMessage_Status_Name(msg.status()) + "\n" + msg.message();
+    return fmt::format("{} - {}\n{}\n",  
+            msg.name(), 
+            messages::HealthMessage_Status_Name(msg.status()), 
+            msg.message());
 }
 
 void listener::render() {
-    std::lock_guard<std::mutex> lk{render_mtx};
-    std::cout << "\033c";
+    fmt::print("\033c");
     for (const auto& pair : health_messages) {
-        std::cout << construct_string(pair.second) << std::endl;
+        fmt::print("{}", construct_string(pair.second));
         for (int i{0}; i < 10; i++) {
-            std::cout << "-";
+            fmt::print("-");
         }
-        std::cout << std::endl;
+        fmt::print("\n");
     }
 }
 
@@ -59,13 +62,17 @@ void listener::serve(asio::ip::tcp::socket sock) {
     while (true) {
         try {
             networking::receive_protobuf(sock, hm);
-            if (update(hm.name(), hm)) {
-                name = hm.name();
-                render();
+            {
+                std::lock_guard<std::mutex> lk{render_mtx};
+                if (update(hm.name(), hm)) {
+                    name = hm.name();
+                    render();
+                }
             }
 
             networking::send_protobuf(sock, repl);
         } catch (...) {
+            std::lock_guard<std::mutex> lk{render_mtx};
             del(name);
             return; // Thread dies and it is going to be recreated on the next connection
         }

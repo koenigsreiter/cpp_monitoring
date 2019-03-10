@@ -21,6 +21,9 @@ messages::HealthMessage monitor::exec_check(messages::ConfigMessage& config, int
         } else {
             current_request_interval *= 2;
         }
+        if (config.type() == messages::ConfigMessage_ConfigType::ConfigMessage_ConfigType_UDP) {
+            logger::log->debug("Returning {}", res.DebugString());
+        }
     } catch (const std::exception& e) {
         res.set_status(messages::HealthMessage_Status::HealthMessage_Status_DOWN);
         current_request_interval *= 2;

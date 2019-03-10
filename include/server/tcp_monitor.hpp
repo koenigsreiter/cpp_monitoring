@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef TCP_MONITOR_HPP
 #define TCP_MONITOR_HPP
 

@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #include <CLI11.hpp>
 #include <thread>
 #include <optional>

@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef HEALTH_CHECK_HPP
 #define HEALTH_CHECK_HPP
 

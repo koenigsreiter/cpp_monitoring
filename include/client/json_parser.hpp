@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef JSON_PARSER_HPP
 #define JSON_PARSER_HPP
 

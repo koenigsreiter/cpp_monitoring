@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef TELNET_MONITOR_HPP
 #define TELNET_MONITOR_HPP
 

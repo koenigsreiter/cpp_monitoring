@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef POP3_MONITOR_HPP
 #define POP3_MONITOR_HPP
 

@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef UDP_MONITOR_HPP
 #define UDP_MONITOR_HPP
 

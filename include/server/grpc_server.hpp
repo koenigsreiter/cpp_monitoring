@@ -1,3 +1,9 @@
+/*
+ * Name: Königsreiter Simon
+ * Class: 5BHIF
+ * MatrNr.: i14084
+ */
+
 #ifndef GRPC_SERVER_HPP
 #define GRPC_SERVER_HPP
 

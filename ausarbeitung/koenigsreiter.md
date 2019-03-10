@@ -1,5 +1,5 @@
 ---
-title: Report
+title: Monitoring tool
 author: Königsreiter Simon
 date: \today
 documentclass: report
@@ -9,6 +9,10 @@ toc: true
 # Monitoring tool
 
 This is the essay accompanying the Monitoring tool. It will give a quick overview of the problem and will then explain the various subprograms and the required protocols.
+
+## Task
+
+The scope of this task is to implement a monitoring tool for a variety of services.
 
 ## Important information
 
@@ -68,3 +72,4 @@ The following libraries were used to power the tool:
 | Output (Client)        | `fmt`      |
 | Configuration (Client) | `JSON`     |
 | CLI argument parsing   | `CLI11`    |
+| Reques to POP3 & HTTP  | `curl`     |

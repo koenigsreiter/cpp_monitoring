@@ -1,0 +1,21 @@
+# Images for Report
+*.pdf
+*.png
+
+# Build folder
+build/
+
+# Config
+config.json
+
+# VSCode folder
+.vscode
+
+# Generated TEX files
+*.tex
+
+# Doxygen docs
+docs/
+
+# Report UMLs
+ausarbeitung/compiled_umls
